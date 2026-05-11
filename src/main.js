@@ -443,12 +443,39 @@ function initScene() {
   setInterval(refreshTLE, REFRESH_INTERVAL_MS)
 }
 
+function togglePanel() {
+  const panel = document.getElementById('ui-panel')
+  const overlay = document.getElementById('panel-overlay')
+  const btn = document.getElementById('panel-toggle')
+  if (!panel) return
+  panel.classList.toggle('panel-open')
+  const isOpen = panel.classList.contains('panel-open')
+  if (overlay) overlay.classList.toggle('hidden', !isOpen)
+  if (btn) btn.textContent = isOpen ? '✕' : '☰'
+}
+
 function createUI() {
+  const overlay = document.createElement('div')
+  overlay.id = 'panel-overlay'
+  overlay.className = 'fixed inset-0 bg-black/50 z-30 hidden'
+  document.body.appendChild(overlay)
+  overlay.addEventListener('click', togglePanel)
+
+  const toggleBtn = document.createElement('button')
+  toggleBtn.id = 'panel-toggle'
+  toggleBtn.className = 'fixed right-4 top-4 z-30 w-10 h-10 bg-white/5 backdrop-blur-md border border-white/10 rounded-xl flex items-center justify-center text-white text-lg hover:bg-white/20 transition font-orbitron'
+  toggleBtn.textContent = '☰'
+  toggleBtn.addEventListener('click', togglePanel)
+  document.body.appendChild(toggleBtn)
+
   const panel = document.createElement('div')
   panel.id = 'ui-panel'
   panel.className = 'fixed right-4 top-4 w-64 bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-4 text-white font-orbitron z-30'
   panel.innerHTML = `
-    <div class="text-lg font-bold mb-1">🛸 DEBRIS TRACKER</div>
+    <div class="flex items-center justify-between mb-1">
+      <div class="text-lg font-bold">🛸 DEBRIS TRACKER</div>
+      <button id="panel-close" class="hidden md:hidden text-gray-400 hover:text-white text-lg leading-none">✕</button>
+    </div>
     <div id="data-status" class="text-xs mb-3">Loading...</div>
     <div id="utc-time" class="text-xs text-gray-400 mb-3">IST: --</div>
     <div class="text-xs mb-2 font-semibold">Debris Counts</div>
@@ -481,6 +508,8 @@ function createUI() {
     <div><span style="color:#FFD700">●</span> MEO — Medium Earth Orbit (2000–35,000 km)</div>
     <div><span style="color:#00FF88">●</span> GEO — Geostationary Orbit (35,000+ km)</div>`
   document.body.appendChild(legend)
+
+  document.getElementById('panel-close').addEventListener('click', togglePanel)
 
   document.getElementById('pause-btn').addEventListener('click', () => {
     isPaused = !isPaused
