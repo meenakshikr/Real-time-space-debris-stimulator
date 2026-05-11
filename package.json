@@ -1,0 +1,19 @@
+{
+  "name": "space-debris-simulator",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.0",
+    "vite": "^8.0.12"
+  },
+  "dependencies": {
+    "satellite.js": "^6.0.2",
+    "three": "^0.184.0"
+  }
+}
